@@ -26,7 +26,7 @@ public class Suggestion {
     @Column(nullable = false)
     private String suggestion;
     @Column(nullable = false)
-    private LocalDateTime datetime;
+    private LocalDateTime datetime = LocalDateTime.now();
 
 
 }

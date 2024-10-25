@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "workers")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Worker extends User {
 

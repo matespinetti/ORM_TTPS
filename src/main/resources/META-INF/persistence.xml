@@ -6,19 +6,20 @@
         <!-- Entity classes -->
         <class>com.example.orm_ttps.objetos_sistema.Order</class>
         <class>com.example.orm_ttps.objetos_sistema.Product</class>
+        <class>com.example.orm_ttps.objetos_sistema.Suggestion</class>
         <class>com.example.orm_ttps.objetos_sistema.Client</class>
         <class>com.example.orm_ttps.objetos_sistema.Payment</class>
 
         <properties>
             <!-- MySQL configuration -->
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/buffet"/>
-            <property name="javax.persistence.jdbc.user" value="buffet"/>
-            <property name="javax.persistence.jdbc.password" value="buffet"/>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/buffet"/>
+            <property name="jakarta.persistence.jdbc.user" value="buffet"/>
+            <property name="jakarta.persistence.jdbc.password" value="buffet"/>
 
             <!-- Hibernate properties -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>

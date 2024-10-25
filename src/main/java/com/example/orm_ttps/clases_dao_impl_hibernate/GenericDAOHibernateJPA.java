@@ -3,9 +3,12 @@ package com.example.orm_ttps.clases_dao_impl_hibernate;
 import com.example.orm_ttps.clases_dao.GenericDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import org.hibernate.SessionFactory;
 
 import java.io.Serializable;
 import java.util.List;
+
+
 
 public class GenericDAOHibernateJPA <T> implements GenericDAO<T> {
     protected Class<T> persistentClass;
@@ -13,6 +16,8 @@ public class GenericDAOHibernateJPA <T> implements GenericDAO<T> {
     public GenericDAOHibernateJPA(Class<T> persistentClass) {
         this.persistentClass = persistentClass;
     }
+
+
 
     @Override
     public T save(T entity) {
@@ -60,14 +65,13 @@ public class GenericDAOHibernateJPA <T> implements GenericDAO<T> {
         try {
             tx = em.getTransaction();
             tx.begin();
-            em.remove(em.merge(entity));
+            T managedEntity = em.merge(entity);
+            em.remove(managedEntity);
             tx.commit();
-        }
-        catch (RuntimeException e) {
-            if ( tx != null && tx.isActive() ) tx.rollback();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) tx.rollback();
             throw e; // escribir en un log o mostrar un mensaje
-        }
-        finally {
+        } finally {
             em.close();
         }
     }
