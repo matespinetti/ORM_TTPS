@@ -3,6 +3,7 @@ package com.example.orm_ttps.controller;
 import com.example.orm_ttps.model.*;
 import com.example.orm_ttps.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,13 @@ public class SeedController {
     private MenuComponentRepository menuComponentRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Autowired
@@ -76,7 +83,16 @@ public class SeedController {
         ));
 
 
+
+
+
         roleRepository.saveAll(List.of(client, admin, worker));
+
+        User user1 = new User("21895643", "felipe", "costas", "felipecostas@gmail.com", passwordEncoder.encode("123456"), "http://photo.jpg", worker);
+        User user2 = new User("45283666", "matias", "ramos", "matiasramos@gmail.com", passwordEncoder.encode("123456"), "http://photo.jpg", admin);
+        User user3 = new User("44245678", "juan", "perez", "juanperez@gmail.com", passwordEncoder.encode("123456"), "http://photo.jpg", client);
+
+        this.userRepository.saveAll(List.of(user1, user2, user3));
 
 
         List<Food> foods = List.of(

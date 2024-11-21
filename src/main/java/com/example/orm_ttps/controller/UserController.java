@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
-    @PreAuthorize("hasAuthority('USER_READ')")
+
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
         return ResponseEntity.ok(userService.getAll());

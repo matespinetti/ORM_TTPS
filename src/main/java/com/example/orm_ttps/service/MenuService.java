@@ -1,6 +1,7 @@
 package com.example.orm_ttps.service;
 
 import com.example.orm_ttps.dto.menu.MenuAddRequest;
+import com.example.orm_ttps.exception.MenuComponentFailedTypeException;
 import com.example.orm_ttps.exception.ResourceAlreadyExistsException;
 import com.example.orm_ttps.exception.ResourceNotFoundException;
 import com.example.orm_ttps.model.Menu;
@@ -90,7 +91,7 @@ public class MenuService {
 
             // Check if the component type matches the expected type
             if (component.getType() != expectedType) {
-                throw new ResourceNotFoundException("MenuComponent with id: " + componentId + " is not a " + expectedType);
+                throw new MenuComponentFailedTypeException("MenuComponent with id: " + componentId + " is not a " + expectedType);
             }
 
             return component;  // Return the valid component
