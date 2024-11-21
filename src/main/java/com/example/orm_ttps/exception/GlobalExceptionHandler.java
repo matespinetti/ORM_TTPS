@@ -1,7 +1,10 @@
 package com.example.orm_ttps.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,4 +41,45 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("RECURSO_NO_ENCONTRADO", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex){
+        ErrorResponse errorResponse = new ErrorResponse("ACCESO_DENEGADO", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse("USUARIO_NO_ENCONTRADO", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(CustomExpiredJwtException.class)
+    public ResponseEntity<Object> handleExpiredJwtException(CustomExpiredJwtException ex){
+        System.out.println("ENTREE");
+        ErrorResponse errorResponse = new ErrorResponse("TOKEN_EXPIRADO", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Object> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex){
+        ErrorResponse errorResponse = new ErrorResponse("RECURSO_YA_EXISTENTE", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(MenuComponentFailedTypeException.class)
+    public ResponseEntity<Object> handleMenuComponentFailedTypeException(MenuComponentFailedTypeException ex){
+        ErrorResponse errorResponse = new ErrorResponse("TIPO_MENU_COMPONENTE_INCORRECTO", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
+
 }

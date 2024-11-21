@@ -1,5 +1,6 @@
 package com.example.orm_ttps.service;
 
+import com.example.orm_ttps.exception.CustomExpiredJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+
 public class JwtService {
 
     // Replace this with a secure key in a real application, ideally fetched from environment variables
@@ -66,11 +69,17 @@ public class JwtService {
 
     // Extract all claims from the token
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            throw new CustomExpiredJwtException("Token expired");
+
+
+        }
     }
 
 

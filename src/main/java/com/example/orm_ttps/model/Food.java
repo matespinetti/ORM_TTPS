@@ -19,4 +19,10 @@ public class Food extends Product {
     private String image_url;
 
 
+    public Food(String name, double price, int stock, String image_url) {
+        super(name, price, stock);
+        this.image_url = image_url;
+    }
+
+
 }

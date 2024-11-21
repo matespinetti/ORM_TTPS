@@ -1,12 +1,17 @@
 package com.example.orm_ttps.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -19,7 +24,7 @@ public class MenuComponent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotNull
     private String name;
 
@@ -32,13 +37,17 @@ public class MenuComponent {
     private MenuComponentType type;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "menu_component_menu",
-            joinColumns = @JoinColumn(name = "menu_component_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id")
-    )
-    private List<Menu> menus;
+    @ManyToMany(mappedBy = "components")
+    @JsonIgnore
+
+    private List<Menu> menus = new ArrayList<>();
+
+
+    public MenuComponent(String name, String imageUrl, MenuComponentType type) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.type = type;
+    }
 
 
 
