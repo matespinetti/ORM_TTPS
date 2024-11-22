@@ -79,6 +79,13 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(EmptyMenuException.class)
+    public ResponseEntity<Object> handleEmptyMenuException(EmptyMenuException ex){
+        ErrorResponse errorResponse = new ErrorResponse("MENU_VACIO", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
 

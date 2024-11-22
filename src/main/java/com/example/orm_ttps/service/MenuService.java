@@ -1,6 +1,7 @@
 package com.example.orm_ttps.service;
 
 import com.example.orm_ttps.dto.menu.MenuAddRequest;
+import com.example.orm_ttps.exception.EmptyMenuException;
 import com.example.orm_ttps.exception.MenuComponentFailedTypeException;
 import com.example.orm_ttps.exception.ResourceAlreadyExistsException;
 import com.example.orm_ttps.exception.ResourceNotFoundException;
@@ -40,6 +41,10 @@ public class MenuService {
         components.add(validateAndGetComponent(request.getDrink(), MenuComponentType.DRINK));
 
         components = components.stream().filter(Objects::nonNull).toList();
+        if (components.isEmpty()) {
+            throw new EmptyMenuException("The menu must have at least one component");
+        }
+
         System.out.println(components.size());
         menu = new Menu(request.getName(), request.getPrice(), request.getStock(), request.getIsVegetarian(), request.getDate());
         for (MenuComponent component : components) {
@@ -68,7 +73,13 @@ public class MenuService {
         components.add(validateAndGetComponent(request.getDessert(), MenuComponentType.DESSERT));
         components.add(validateAndGetComponent(request.getDrink(), MenuComponentType.DRINK));
 
+
+
+
         components = components.stream().filter(Objects::nonNull).toList();
+        if (components.isEmpty()) {
+            throw new EmptyMenuException("The menu must have at least one component");
+        }
         System.out.println("HOLAAAAAAAAAA");
         menu.setName(request.getName());
         menu.setPrice(request.getPrice());
