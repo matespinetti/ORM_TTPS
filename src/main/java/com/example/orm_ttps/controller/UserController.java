@@ -3,6 +3,7 @@ package com.example.orm_ttps.controller;
 import com.example.orm_ttps.dto.user.RegisterRequest;
 import com.example.orm_ttps.model.User;
 import com.example.orm_ttps.service.JwtService;
+import com.example.orm_ttps.service.UserInfoService;
 import com.example.orm_ttps.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -27,6 +29,9 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private UserInfoService userInfoService;
+
 
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
@@ -40,8 +45,13 @@ public class UserController {
 
         User user = userService.update(id, request);
 
-        String new_access_token = jwtService.generateToken(user.getEmail());
-        String new_refresh_token = jwtService.generateRefreshToken(user.getEmail());
+        UserDetails userDetails = userInfoService.loadUserByUsername(user.getEmail());
+
+        List<String> permissions = userDetails.getAuthorities().stream().map(Object::toString).toList();
+
+
+        String new_access_token = jwtService.generateToken(user.getEmail(), permissions);
+        String new_refresh_token = jwtService.generateRefreshToken(user.getEmail(), permissions);
 
         Map<String, Object> response = new HashMap<>();
         response.put("user", user);

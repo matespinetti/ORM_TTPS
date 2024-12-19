@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,13 +25,15 @@ public class JwtService {
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
     // Generate token with given user name
-    public String generateToken(String userName) {
+    public String generateToken(String userName, List<String> permissions) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("permissions", permissions);
         return createToken(claims, userName, 1000 * 60 * 30);
     }
 
-    public String generateRefreshToken(String userName) {
+    public String generateRefreshToken(String userName, List<String> permissions) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("permissions", permissions);
         return createToken(claims, userName, 1000 * 60 * 60 * 24 * 7);
     }
 

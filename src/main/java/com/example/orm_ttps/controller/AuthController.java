@@ -14,12 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,9 +45,12 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         if (authentication.isAuthenticated()){
-            String token = jwtService.generateToken(request.getEmail());
-            String refresh_token = jwtService.generateRefreshToken(request.getEmail());
-            return ResponseEntity.ok(Map.of("token", token, "refresh_token", refresh_token));
+            List<String> permissions = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+
+
+            String token = jwtService.generateToken(request.getEmail(), permissions);
+            String refresh_token = jwtService.generateRefreshToken(request.getEmail(), permissions);
+            return ResponseEntity.ok(Map.of("access_token", token, "refresh_token", refresh_token));
         } else {
             throw new UsernameNotFoundException("Usuario o contraseña incorrectos");
         }
@@ -57,9 +63,10 @@ public class AuthController {
         String username = jwtService.extractUsername(refresh_token);
         UserDetails userDetails = userInfoService.loadUserByUsername(username);
         if (jwtService.validateToken(refresh_token, userDetails)){
-            String new_access_token = jwtService.generateToken(username);
-            String new_refresh_token = jwtService.generateRefreshToken(username);
-            return ResponseEntity.ok(Map.of("token", new_access_token, "refresh_token", new_refresh_token));
+            List<String> permissions = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            String new_access_token = jwtService.generateToken(username, permissions);
+            String new_refresh_token = jwtService.generateRefreshToken(username, permissions);
+            return ResponseEntity.ok(Map.of("access_token", new_access_token, "refresh_token", new_refresh_token));
 
         } else {
             return ResponseEntity.badRequest().body("Invalid refresh token");
