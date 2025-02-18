@@ -42,4 +42,13 @@ public class MenuController {
         // Update a menu
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('MENU_DELETE')")
+    public ResponseEntity<Void> deleteMenu(@PathVariable Long id) {
+        menuService.delete(id);
+        return ResponseEntity.ok().build();
+
+
+    }
+
 }

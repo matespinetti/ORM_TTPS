@@ -92,6 +92,12 @@ public class MenuService {
         return menuRepository.save(menu);
     }
 
+
+    public void delete(Long id){
+        Menu menu = menuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Menu not found with id: " + id));
+        menuRepository.delete(menu);
+    }
+
     private MenuComponent validateAndGetComponent(Long componentId, MenuComponentType expectedType) {
         if (componentId != null) {
             // Find the component by ID
