@@ -118,7 +118,7 @@ public class MenuService {
 
     @Transactional
     public List<Menu> getAll(){
-        List<Menu> menus = menuRepository.findAll();
+        List<Menu> menus = menuRepository.findAllByOrderByDateDesc();
         return menus;
     }
 

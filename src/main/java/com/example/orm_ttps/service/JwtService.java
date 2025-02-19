@@ -28,12 +28,14 @@ public class JwtService {
     public String generateToken(String userName, List<String> permissions) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("permissions", permissions);
+
         return createToken(claims, userName, 1000 * 60 * 30);
     }
 
     public String generateRefreshToken(String userName, List<String> permissions) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("permissions", permissions);
+
         return createToken(claims, userName, 1000 * 60 * 60 * 24 * 7);
     }
 

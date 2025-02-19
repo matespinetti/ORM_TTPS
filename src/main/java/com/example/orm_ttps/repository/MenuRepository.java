@@ -13,4 +13,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 
     @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.components")
     List<Menu> findAllWithComponents();
+
+
+    List<Menu> findAllByOrderByDateDesc();
 }

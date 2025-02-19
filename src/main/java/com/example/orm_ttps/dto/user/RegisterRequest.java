@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class RegisterRequest {
@@ -24,7 +25,8 @@ public class RegisterRequest {
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
-    private String photo_url;
+
+
 
     @NotBlank(message = "El rol de usuario es obligatorio")
     @Pattern(regexp = "CLIENT|ADMIN|WORKER", message = "El rol de usuario debe ser CLIENT, ADMIN o WORKER")

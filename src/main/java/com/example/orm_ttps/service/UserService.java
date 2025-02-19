@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,11 +29,14 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     public List<User> getAll(){
         return userRepository.findAll();
     }
 
-    public User register (RegisterRequest request){
+    public User register (RegisterRequest request, MultipartFile image){
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
@@ -40,6 +44,9 @@ public class UserService {
         if (userRepository.existsByDni(request.getDni())) {
             throw new DniAlreadyExistsException(request.getDni());
         }
+
+
+
 
         Role role = roleRepository.findByName(request.getRole().toUpperCase()).orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + request.getName()));
 
@@ -50,8 +57,18 @@ public class UserService {
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhoto_url(request.getPhoto_url());
+
         user.setRole(role);
+
+        try {
+
+            user.setPhoto_url(fileStorageService.storeFile(image));
+        } catch (Exception e) {
+
+            System.out.println("Error al guardar la imagen");
+            user.setPhoto_url(null);
+
+        }
 
 
         return userRepository.save(user);
@@ -84,7 +101,7 @@ public class UserService {
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhoto_url(request.getPhoto_url());
+
         user.setRole(role);
         return userRepository.save(user);
     }
