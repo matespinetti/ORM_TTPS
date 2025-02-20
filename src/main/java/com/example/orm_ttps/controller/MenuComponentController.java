@@ -40,4 +40,11 @@ public class MenuComponentController {
         return ResponseEntity.ok(menuComponent);
     }
 
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('COMPONENT_DELETE')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        menuComponentService.delete(id);
+        return ResponseEntity.ok().build();    }
+
 }

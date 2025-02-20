@@ -72,5 +72,19 @@ public class MenuComponentService  {
         return menuComponentRepository.findAll();
     }
 
+    public void delete(Long id) {
+        MenuComponent menuComponent = menuComponentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Component not found with id: " + id));
+
+        if (menuComponent.getImageUrl() != null) {
+            try {
+                fileStorageService.deleteFile(menuComponent.getImageUrl());
+            } catch (Exception e) {
+                System.out.println("Error deleting file");
+            }
+        }
+
+        menuComponentRepository.delete(menuComponent);
+    }
 
 }
