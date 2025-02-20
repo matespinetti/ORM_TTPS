@@ -50,6 +50,14 @@ public class MenuComponentService  {
 
         menuComponent.setType(MenuComponentType.valueOf(request.getType()));
 
+        if (menuComponent.getImageUrl() != null){
+            try {
+                fileStorageService.deleteFile(menuComponent.getImageUrl());
+            } catch (Exception e) {
+                System.out.println("Error deleting file");
+            }
+        }
+
         try {
             menuComponent.setImageUrl(fileStorageService.storeFile(image));
 
