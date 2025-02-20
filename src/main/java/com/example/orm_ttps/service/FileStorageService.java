@@ -20,6 +20,9 @@ public class FileStorageService {
     private final ULID ulid = new ULID();
 
     public String storeFile(MultipartFile file) throws IOException {
+        if (file == null | file.isEmpty()) {
+            return null;
+        }
         File directory = new File(uploadDir);
         if (!directory.exists()) {
             directory.mkdirs();

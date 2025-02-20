@@ -10,7 +10,7 @@ public class MenuComponentAddRequest {
     @NotNull(message = "El nombre es requerido")
     private String name;
 
-    private String imageUrl;
+
 
     @NotNull(message = "El tipo es requerido")
     @Pattern(regexp = "STARTER|MAIN_DISH|DRINK|DESSERT", message = "El tipo debe ser STARTER, MAIN_DISH, DRINK o DESSERT")
