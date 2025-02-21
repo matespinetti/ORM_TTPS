@@ -1,6 +1,7 @@
 package com.example.orm_ttps.controller;
 
 import com.example.orm_ttps.dto.user.RegisterRequest;
+import com.example.orm_ttps.dto.user.UserInfoDetails;
 import com.example.orm_ttps.model.User;
 import com.example.orm_ttps.service.JwtService;
 import com.example.orm_ttps.service.UserInfoService;
@@ -49,9 +50,10 @@ public class UserController {
 
         List<String> permissions = userDetails.getAuthorities().stream().map(Object::toString).toList();
 
+        String role = ((UserInfoDetails) userDetails).getRole();
 
-        String new_access_token = jwtService.generateToken(user.getEmail(), permissions);
-        String new_refresh_token = jwtService.generateRefreshToken(user.getEmail(), permissions);
+        String new_access_token = jwtService.generateToken(user.getEmail(), permissions, role);
+        String new_refresh_token = jwtService.generateRefreshToken(user.getEmail(), permissions, role);
 
         Map<String, Object> response = new HashMap<>();
         response.put("user", user);

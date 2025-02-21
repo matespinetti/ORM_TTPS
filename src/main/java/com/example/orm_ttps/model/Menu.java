@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -34,10 +35,10 @@ public class Menu extends Product {
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date date;
+    private LocalDate date;
 
 
-    public Menu(String name, double price, int stock, boolean isVegetarian, Date date) {
+    public Menu(String name, double price, int stock, boolean isVegetarian, LocalDate date) {
         super(name, price, stock);
         this.isVegetarian = isVegetarian;
         this.date = date;

@@ -23,8 +23,10 @@ public class MenuController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('MENU_READ')")
-    public ResponseEntity<List<Menu>> getAll() {
-        return ResponseEntity.ok(menuService.getAll());
+    public ResponseEntity<List<Menu>> getAll(
+            @RequestParam(required = false) String date
+    ) {
+        return ResponseEntity.ok(menuService.getAll(date));
     }
 
     @PostMapping

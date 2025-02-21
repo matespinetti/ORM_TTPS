@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -117,9 +119,14 @@ public class MenuService {
     }
 
     @Transactional
-    public List<Menu> getAll(){
-        List<Menu> menus = menuRepository.findAllByOrderByDateDesc();
-        return menus;
+    public List<Menu> getAll(String date){
+        if (date !=null){
+            LocalDate localDate = LocalDate.parse(date);
+            return menuRepository.findAllByDate(localDate);
+
+        }
+        return menuRepository.findAllByOrderByDateDesc();
+
     }
 
 

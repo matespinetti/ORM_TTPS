@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -25,7 +26,7 @@ public class MenuAddRequest {
     private Boolean isVegetarian;
 
     @NotNull
-    private Date date;
+    private LocalDate date;
 
 
     private Long starter;

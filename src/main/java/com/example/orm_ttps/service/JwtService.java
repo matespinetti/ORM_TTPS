@@ -25,16 +25,18 @@ public class JwtService {
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
     // Generate token with given user name
-    public String generateToken(String userName, List<String> permissions) {
+    public String generateToken(String userName, List<String> permissions, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("permissions", permissions);
+        claims.put("role", role);
 
         return createToken(claims, userName, 1000 * 60 * 30);
     }
 
-    public String generateRefreshToken(String userName, List<String> permissions) {
+    public String generateRefreshToken(String userName, List<String> permissions, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("permissions", permissions);
+        claims.put("role", role);
 
         return createToken(claims, userName, 1000 * 60 * 60 * 24 * 7);
     }

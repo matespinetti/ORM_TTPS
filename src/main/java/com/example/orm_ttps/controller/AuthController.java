@@ -3,6 +3,7 @@ package com.example.orm_ttps.controller;
 import com.example.orm_ttps.dto.user.AuthRequest;
 import com.example.orm_ttps.dto.user.RefreshRequest;
 import com.example.orm_ttps.dto.user.RegisterRequest;
+import com.example.orm_ttps.dto.user.UserInfoDetails;
 import com.example.orm_ttps.model.User;
 import com.example.orm_ttps.service.JwtService;
 import com.example.orm_ttps.service.UserInfoService;
@@ -39,6 +40,8 @@ public class AuthController {
     @Autowired
     private UserInfoService userInfoService;
 
+
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -49,8 +52,10 @@ public class AuthController {
         if (authentication.isAuthenticated()){
             List<String> permissions = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-            String token = jwtService.generateToken(request.getEmail(), permissions);
-            String refresh_token = jwtService.generateRefreshToken(request.getEmail(), permissions);
+            String role = ((UserInfoDetails) userInfoService.loadUserByUsername(request.getEmail())).getRole();
+
+            String token = jwtService.generateToken(request.getEmail(), permissions, role);
+            String refresh_token = jwtService.generateRefreshToken(request.getEmail(), permissions, role);
             return ResponseEntity.ok(Map.of("access_token", token, "refresh_token", refresh_token));
         } else {
             throw new UsernameNotFoundException("Usuario o contraseña incorrectos");
@@ -65,8 +70,9 @@ public class AuthController {
         UserDetails userDetails = userInfoService.loadUserByUsername(username);
         if (jwtService.validateToken(refresh_token, userDetails)){
             List<String> permissions = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            String new_access_token = jwtService.generateToken(username, permissions);
-            String new_refresh_token = jwtService.generateRefreshToken(username, permissions);
+            String role = ((UserInfoDetails) userDetails).getRole();
+            String new_access_token = jwtService.generateToken(username, permissions, role);
+            String new_refresh_token = jwtService.generateRefreshToken(username, permissions, role );
             return ResponseEntity.ok(Map.of("access_token", new_access_token, "refresh_token", new_refresh_token));
 
         } else {

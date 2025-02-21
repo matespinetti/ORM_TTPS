@@ -125,13 +125,13 @@ public class SeedController {
         this.menuComponentRepository.saveAll(components);
 
 
-        Menu menu = new Menu("Menu 1", 100.0, 10, false, Date.from(new Date().toInstant().plusSeconds(86400)));
+        Menu menu = new Menu("Menu 1", 100.0, 10, false, LocalDate.now());
         for (MenuComponent component : components.subList(0,4)) {
             menu.addComponent(component);
         }
 
 
-        Menu menu2 = new Menu("Menu 2", 200.0, 20, true, new Date());
+        Menu menu2 = new Menu("Menu 2", 200.0, 20, true,LocalDate.now());
         for (MenuComponent component : components.subList(4,8)) {
             menu2.addComponent(component);
         }
